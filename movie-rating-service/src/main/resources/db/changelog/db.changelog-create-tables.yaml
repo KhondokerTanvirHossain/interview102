@@ -1,0 +1,34 @@
+databaseChangeLog:
+    -   changeSet:
+            id: 4
+            author: tanvir (generated)
+            changes:
+                -   createTable:
+                        tableName: movie_rating
+                        columns:
+                            -   column:
+                                    name: id
+                                    type: SERIAL
+                                    constraints:
+                                        primaryKey: true
+                                        nullable: false
+                            -   column:
+                                    name: movie_id
+                                    type: INT
+                                    constraints:
+                                        nullable: false
+                            -   column:
+                                    name: rating
+                                    type: INT
+                                    constraints:
+                                        nullable: false
+    -   changeSet:
+            id: 5
+            author: tanvir
+            changes:
+                -   addForeignKeyConstraint:
+                        baseTableName: movie_rating
+                        baseColumnNames: movie_id
+                        constraintName: fk_movie_rating_movie
+                        referencedTableName: movie
+                        referencedColumnNames: id
