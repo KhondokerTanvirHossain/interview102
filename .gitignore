@@ -1,23 +1,8 @@
-# Gradle
-.gradle/
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-# IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-out/
-
-# VS Code
-.vscode/
-
 # Logs
 *.log
 /logs
-.logs
+.logs/
+/*.logs
 *.pid
 *.seed
 *.pid.lock
@@ -35,9 +20,22 @@ Thumbs.db
 # Generated files
 *.class
 *.log
-*.ctxt
-*.db
-*.sqlite
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 # Maven
 target/
@@ -65,9 +63,6 @@ tmp/
 
 # Spring Boot
 spring.log
-
-# Vscode
-.vscode/
 
 # Others
 *.swp
