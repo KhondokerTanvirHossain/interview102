@@ -1,0 +1,15 @@
+### Get all movie ratings
+GET http://localhost:8082/api/v1/movie-rating
+Accept: application/json
+
+### Get all movie ratings with pagination and multiple sorting criteria
+GET http://localhost:8082/api/v1/movie-rating/page?page=0&size=10&sortBy=movieId&sortBy=rating&sortDirection=asc&sortDirection=desc
+Accept: application/json
+
+### Get all movie ratings with pagination, multiple sorting criteria, and filtering
+GET http://localhost:8082/api/v1/movie-rating/filter?page=0&size=10&sortBy=movieId&sortBy=rating&sortDirection=asc&sortDirection=desc&id=1&rating=5
+Accept: application/json
+
+### Get all movie ratings with pagination, multiple sorting criteria, and filtering with multiple values for the same column
+GET http://localhost:8082/api/v1/movie-rating/list-filter?page=0&size=10&sortBy=movieId&sortBy=rating&sortDirection=asc&sortDirection=desc&id=1,2&rating=4,5
+Accept: application/json
