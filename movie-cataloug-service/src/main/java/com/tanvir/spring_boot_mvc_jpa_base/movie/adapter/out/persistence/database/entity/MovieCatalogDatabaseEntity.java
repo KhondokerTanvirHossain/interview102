@@ -1,4 +1,4 @@
-package com.tanvir.spring_boot_mvc_jpa_base;
+package com.tanvir.spring_boot_mvc_jpa_base.movie.adapter.out.persistence.database.entity;
 
 
 import jakarta.persistence.*;
@@ -9,18 +9,19 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
+@Table(name = "movie_catalog")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class MovieCatalog {
+public class MovieCatalogDatabaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
-    private Movie movie;
+    private MovieDatabaseEntity movie;
 
     private Boolean available;
     private BigDecimal price;
@@ -34,7 +35,7 @@ public class MovieCatalog {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        MovieCatalog that = (MovieCatalog) o;
+        MovieCatalogDatabaseEntity that = (MovieCatalogDatabaseEntity) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

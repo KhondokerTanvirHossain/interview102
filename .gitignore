@@ -66,6 +66,9 @@ tmp/
 # Spring Boot
 spring.log
 
+# Vscode
+.vscode/
+
 # Others
 *.swp
 *~

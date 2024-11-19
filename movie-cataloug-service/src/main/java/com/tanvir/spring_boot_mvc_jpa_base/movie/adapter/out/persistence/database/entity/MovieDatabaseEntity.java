@@ -1,9 +1,6 @@
-package com.tanvir.spring_boot_mvc_jpa_base;
+package com.tanvir.spring_boot_mvc_jpa_base.movie.adapter.out.persistence.database.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -11,11 +8,12 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@Table(name = "movie")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Movie {
+public class MovieDatabaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +29,8 @@ public class Movie {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Movie movie = (Movie) o;
-        return getId() != null && Objects.equals(getId(), movie.getId());
+        MovieDatabaseEntity movieDatabaseEntity = (MovieDatabaseEntity) o;
+        return getId() != null && Objects.equals(getId(), movieDatabaseEntity.getId());
     }
 
     @Override
