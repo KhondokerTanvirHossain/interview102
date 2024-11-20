@@ -157,3 +157,14 @@ Accept: application/json
 * Tracing: Micrometer and Zipkin are used for distributed tracing and monitoring.
 
 * Logging: Logback is used for logging, with Logstash encoder for structured logging.
+
+## Questions
+
+1. Draw a sequence diagram for the price-range API interaction.
+2. How would you improve the price-range API for performance and usability?
+3. How can you modify the price-range API to include movie ratings in the response?
+4. What improvements can you suggest in terms of exception handling for the price-range API?
+How would you address code review feedback and document the changes?
+5. How would you test the price-range API, including unit, integration, and performance tests?
+6. What strategies would you use to improve the performance of the price-range API?
+7. What changes would you make to scale the Movie Catalog Service for tenfold traffic growth?
