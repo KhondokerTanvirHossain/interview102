@@ -161,7 +161,7 @@ Accept: application/json
 ## Questions
 
 1. Draw a sequence diagram for the price-range API interaction.
-2. How would you improve the price-range API for performance and usability?
+2. How would you improve the `price-range` API of `movie-catalog` service for performance and usability?
 3. How can you modify the price-range API to include movie ratings in the response?
 4. What improvements can you suggest in terms of exception handling for the price-range API?
 How would you address code review feedback and document the changes?
