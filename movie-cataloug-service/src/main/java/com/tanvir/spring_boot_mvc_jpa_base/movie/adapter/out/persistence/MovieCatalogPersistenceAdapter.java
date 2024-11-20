@@ -8,8 +8,11 @@ import com.tanvir.spring_boot_mvc_jpa_base.movie.domain.domainentity.Movie;
 import com.tanvir.spring_boot_mvc_jpa_base.movie.domain.domainentity.MovieCatalog;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -25,5 +28,10 @@ public class MovieCatalogPersistenceAdapter implements MovieCatalogPersistencePo
             .map(movie -> modelMapper.map(movie, MovieCatalog.class))
             .toList()
             ;
+    }
+
+    public Page<MovieCatalog> getMoviesByPriceRange(BigDecimal lowerPrice, BigDecimal higherPrice, Pageable pageable) {
+        return movieCatalogRepository.findByPriceBetween(lowerPrice, higherPrice, pageable)
+            .map(movie -> modelMapper.map(movie, MovieCatalog.class));
     }
 }

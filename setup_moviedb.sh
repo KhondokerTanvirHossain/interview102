@@ -4,6 +4,7 @@
 sudo -i -u postgres <<EOF
 
 psql <<SQL
+DROP DATABASE IF EXISTS moviedb;
 
 -- CREATE ROLE admin WITH LOGIN SUPERUSER CREATEDB CREATEROLE PASSWORD 'admin';
 -- CREATE USER developer WITH ENCRYPTED PASSWORD 'developer';

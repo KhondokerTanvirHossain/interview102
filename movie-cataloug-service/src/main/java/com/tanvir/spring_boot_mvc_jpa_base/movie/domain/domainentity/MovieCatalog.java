@@ -11,5 +11,6 @@ public class MovieCatalog {
     private Movie movie;
     private Boolean available;
     private BigDecimal price;
+    private MovieInfo movieInfo;
 
 }
