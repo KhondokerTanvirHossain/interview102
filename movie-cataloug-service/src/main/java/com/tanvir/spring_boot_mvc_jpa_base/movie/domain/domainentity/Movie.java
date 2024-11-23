@@ -11,5 +11,6 @@ public class Movie {
     private String title;
     private LocalDate releaseDate;
     private String genre;
+    private int rating;
 
 }

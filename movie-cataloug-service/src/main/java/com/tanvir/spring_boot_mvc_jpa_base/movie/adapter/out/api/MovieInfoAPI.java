@@ -6,11 +6,9 @@ import com.tanvir.spring_boot_mvc_jpa_base.core.util.constants.Constants;
 import com.tanvir.spring_boot_mvc_jpa_base.movie.adapter.out.api.dto.MoviePageResponse;
 import com.tanvir.spring_boot_mvc_jpa_base.movie.application.port.out.api.MovieInfoAPIPort;
 import com.tanvir.spring_boot_mvc_jpa_base.movie.domain.domainentity.MovieInfo;
+import com.tanvir.spring_boot_mvc_jpa_base.movie.domain.domainentity.MovieRating;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -20,6 +18,8 @@ import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -42,7 +42,49 @@ public class MovieInfoAPI implements MovieInfoAPIPort {
             .block();
     }
 
+    @Override
+    public List<MovieInfo> getFilteredMovieInfoBatch(int page, int size, String[] sortBy, String[] sortDirection,List<Long> ids) {
+        try {
+            // Fetch movie info in batch
+            MoviePageResponse response = webClient
+                    .get()
+                    .uri(uriBuilder -> buildBatchUri(uriBuilder,page, size, sortBy, sortDirection, ids))
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, clientResponse -> processError(clientResponse, Constants.MOVIE_INFO_API_V1))
+                    .bodyToMono(MoviePageResponse.class)
+                    .doOnError(throwable -> log.error("Failed to get batch response from movie info API: {}", throwable.getMessage()))
+                    .doOnSuccess(resp -> log.info("Successfully got batch response from movie info API"))
+                    .block();
 
+            // Return the list of MovieInfo
+            return response != null ? response.getContent() : Collections.emptyList();
+        } catch (Exception e) {
+            log.error("Exception while fetching batch movie info: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<MovieRating> getFilteredMovieRatingBatch(int page, int size, String[] sortBy, String[] sortDirection, List<Long> ids, List<Integer> ratings) {
+        try {
+            MoviePageResponse response = webClient
+                    .get()
+                    .uri(uriBuilder -> buildRatingBatchUri(uriBuilder, page, size, sortBy, sortDirection, ids, ratings))
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, clientResponse -> processError(clientResponse, Constants.MOVIE_RATING_API_V1))
+                    .bodyToMono(MoviePageResponse.class)
+                    .doOnError(throwable -> log.error("Failed to get batch response from movie rating API: {}", throwable.getMessage()))
+                    .doOnSuccess(resp -> log.info("Successfully got batch response from movie rating API"))
+                    .block();
+
+            return response != null ? response.getRating() : Collections.emptyList();
+        } catch (Exception e) {
+            log.error("Exception while fetching batch movie ratings: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
 
     private URI buildUri(UriBuilder uriBuilder, int page, int size, String[] sortBy, String[] sortDirection, Long id) {
         return uriBuilder
@@ -53,6 +95,29 @@ public class MovieInfoAPI implements MovieInfoAPIPort {
             .queryParam("sortDirection", (Object[]) sortDirection)
             .queryParam("id", id)
             .build();
+    }
+
+    private URI buildBatchUri(UriBuilder uriBuilder,int page, int size, String[] sortBy, String[] sortDirection, List<Long> ids) {
+        return uriBuilder
+                .path(Constants.MOVIE_INFO_API_V1 + "/list-filter")
+                .queryParam("page", page)
+                .queryParam("size", size)
+                .queryParam("sortBy", (Object[]) sortBy)
+                .queryParam("sortDirection", (Object[]) sortDirection)
+                .queryParam("id", ids.toArray()) // Include all movie IDs as a comma-separated list
+                .build();
+    }
+
+    private URI buildRatingBatchUri(UriBuilder uriBuilder, int page, int size, String[] sortBy, String[] sortDirection, List<Long> ids, List<Integer> ratings) {
+        return uriBuilder
+                .path(Constants.MOVIE_RATING_API_V1 + "/list-filter")
+                .queryParam("page", page)
+                .queryParam("size", size)
+                .queryParam("sortBy", (Object[]) sortBy)
+                .queryParam("sortDirection", (Object[]) sortDirection)
+                .queryParam("id", ids.toArray())
+                .queryParam("rating", ratings.toArray())
+                .build();
     }
 
     private Mono<Throwable> processError(ClientResponse response, String url) {
