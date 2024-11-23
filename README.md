@@ -168,3 +168,36 @@ How would you address code review feedback and document the changes?
 5. How would you test the price-range API, including unit, integration, and performance tests?
 6. What strategies would you use to improve the performance of the price-range API?
 7. What changes would you make to scale the Movie Catalog Service for tenfold traffic growth?
+
+## Sequence diagram (Drawn by abir)
+
+```diagram
++---------------+      +---------------------+      +------------------+      +-----------------------+      +-------------------+      +---------------+
+|     User      |      |     Controller      |      |      Service     |      |   Persistence Port    |      |     Repository     |      |  External API |
++---------------+      +---------------------+      +------------------+      +-----------------------+      +-------------------+      +---------------+
+       |                          |                          |                           |                          |                          |
+       |  GET /price-range        |                          |                           |                          |                          |
+       +------------------------->|                          |                           |                          |                          |
+       |                          | Calls getMoviesByPriceRange(lowerPrice, higherPrice, pageable)                 |                          |
+       |                          +------------------------->|                           |                          |                          |
+       |                          |                          | Calls getMoviesByPriceRange(lowerPrice, higherPrice, pageable)                 |
+       |                          |                          +------------------------->|                          |                          |
+       |                          |                          |                          | Calls findByPriceBetween(lowerPrice, higherPrice, pageable)
+       |                          |                          |                          +------------------------->|                          |
+       |                          |                          |                          |                          | Queries database         |
+       |                          |                          |                          |                          +------------------------->|
+       |                          |                          |                          |                          | Retrieves MovieCatalogEntities
+       |                          |                          |                          |                          | Maps to MovieCatalog    |
+       |                          |                          |                          |                          +<-------------------------+
+       |                          |                          |                          |                          |
+       |                          |                          |                          +<-------------------------+
+       |                          |                          +<-------------------------+
+       |                          +<-------------------------+
+       |                          | For each MovieCatalog:   |
+       |                          | Calls getFilteredMovieInfo(...)                  |
+       |                          +------------------------------------------------->|                          |
+       |                          |                          |                          | Enriches MovieCatalog  |
+       |                          +<-------------------------------------------------+                          |
+       | Returns enriched JSON    |                          |                          |                          |
+       +<-------------------------+                          |                          |                          |
+```
